@@ -21,7 +21,7 @@ export default async function downloadImage($file,_exif,_minigl, onSave){
         const meta = $file.value;
         const filename=meta.file.name
         const newfilename=reactive(filename.split('.')[0])
-        const format=reactive('jpeg')
+        const format=reactive('png')
         const quality=reactive('0.9')
 
         function handleSelect(e){
@@ -37,8 +37,8 @@ export default async function downloadImage($file,_exif,_minigl, onSave){
                     <div>
                       <input style="width:225px;font-size:14px;" type="text" :value="${()=>newfilename.value}" @change="${(e=>newfilename.value=e.target.value)}" disabled="${!!onSave}">
                       <select style="width:60px;height:29px;font-size:14px;" @change="${handleSelect}">
-                        <option value='jpeg' selected>jpeg</option>
-                        <option value='png'>png</option>
+                        <option value='png' selected>png</option>
+                        <option value='jpeg'>jpeg</option>
                       </select>
                     </div>
                    <div style="height:60px;display:flex;justify-content: space-between;align-items: center;">
@@ -71,8 +71,28 @@ export default async function downloadImage($file,_exif,_minigl, onSave){
         newfilename.value+='.'+format._value
         if(!onSave) {
           const mob = isMobile(window.navigator).any;
-          if(mob) shareBlob(newfilename.value,new Blob([_newexif.image()]))
-          else _newexif.download(newfilename.value)          
+          if(mob) {
+            shareBlob(newfilename.value,new Blob([_newexif.image()]))
+          } else if(window.showSaveFilePicker) {
+            try {
+              const ext = format._value
+              const mimeType = ext === 'jpeg' ? 'image/jpeg' : 'image/png'
+              const handle = await window.showSaveFilePicker({
+                suggestedName: newfilename.value,
+                types: [{
+                  description: ext.toUpperCase() + ' Image',
+                  accept: { [mimeType]: ['.' + (ext === 'jpeg' ? 'jpg' : ext)] }
+                }]
+              })
+              const writable = await handle.createWritable()
+              await writable.write(new Blob([_newexif.image()], { type: mimeType }))
+              await writable.close()
+            } catch(e) {
+              if(e.name !== 'AbortError') console.error(e)
+            }
+          } else {
+            _newexif.download(newfilename.value)
+          }
         }
         else {
           onSave(filename,new Blob([_newexif.image()]),format._value)
