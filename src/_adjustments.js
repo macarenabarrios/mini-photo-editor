@@ -5,12 +5,6 @@ import {debounce} from './js/tools.js'
 
 export default function adjustments($selection, params, onUpdate){
 
-  const heights={
-    lights:190,
-    colors:150,
-    effects:105
-  }
-
   reactive(()=>{
     if($selection.value===null) {
       //app has been reset, new values loaded
@@ -89,7 +83,7 @@ export default function adjustments($selection, params, onUpdate){
 
         ${section(
             secname,          //section's name
-            heights[secname], // section's height once open
+            null,             // height auto-measured from content
             $selection,       //signal with active sectioname, that opens/closes section
             params,           //section's params obj of which $skip field will be set on/off
             onUpdate,         //called when section is enabled/disabled

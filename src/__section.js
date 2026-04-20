@@ -2,8 +2,22 @@ import { html, reactive, onMount, onUnmount } from '@xdadda/mini'
 
 
 //Note: if onEnable notdefined/null the enable/disable button will not be visible
+//Note: `height` is kept for backward-compatibility but ignored — sections now
+//      auto-size to their content via scrollHeight measurement.
 export default function section(sectionname, height, $selection, params, onEnable, onReset, sectionComponent){
 
+    // Auto-fit the section height to its content whenever this section is opened.
+    // Runs after the DOM has rendered the content (rAF gives the browser one tick).
+    reactive(()=>{
+      if($selection.value!==sectionname) return
+      requestAnimationFrame(()=>{
+        const sec = document.getElementById(sectionname)
+        const content = document.getElementById(sectionname+'_content')
+        if(!sec || !content) return
+        // header is ~23px + some padding; content.scrollHeight gives the real inner size
+        sec.style.height = (content.scrollHeight + 40) + 'px'
+      })
+    },{effect:true})
 
     function resetSection(){
       if(params[sectionname]?.$skip) return
@@ -38,7 +52,7 @@ export default function section(sectionname, height, $selection, params, onEnabl
 
 
   return html`
-    <div class="section" id="${sectionname}" :style="${()=>$selection.value===sectionname&&`height:${height}px;`}" :selected="${()=>$selection.value===sectionname}" @click="${(e)=>{e.stopPropagation();$selection.value=sectionname}}">
+    <div class="section" id="${sectionname}" :style="${()=>$selection.value!==sectionname&&'height:23px;'}" :selected="${()=>$selection.value===sectionname}" @click="${(e)=>{e.stopPropagation();$selection.value=sectionname}}">
         <div class="section_header" >
           ${!!onEnable && html`<a id="btn_skip_${sectionname}" class="section_skip" @click="${handleSkipSection}" title="toggle">\u2609</a>`}
           <b class="section_label">${sectionname}</b>
