@@ -87,7 +87,7 @@ export function Editor(input=false){
       crop: {currentcrop:0, glcrop:0, canvas_angle:0, ar:0, arindex:0},
       lights: { brightness:0, exposure:0, gamma:0, contrast:0, shadows:0, highlights:0, bloom:0, },
       colors: { temperature:0, tint:0, vibrance:0, saturation:0, sepia:0, },
-      effects: { clarity:0, noise:0, vignette:0, },
+      effects: { clarity:0, texture:0, sharpen:0, noise:0, vignette:0, },
       curve: {curvepoints: 0},
       filters: { opt:0, mix:0 },
       perspective: {quad:0, modified:0},
@@ -279,6 +279,8 @@ export function Editor(input=false){
 
       if(adjparams.bloom) _minigl.filterBloom(adjparams.bloom)
       if(adjparams.noise) _minigl.filterNoise(adjparams.noise)
+      if(adjparams.texture) _minigl.filterTexture(adjparams.texture * 100)
+      if(adjparams.sharpen>0) _minigl.filterSharpen(adjparams.sharpen * 100)
       if(adjparams.shadows||adjparams.highlights) _minigl.filterHighlightsShadows(adjparams.highlights||0,-adjparams.shadows||0)
       ///////////
 
