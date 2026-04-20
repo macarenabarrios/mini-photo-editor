@@ -1,7 +1,7 @@
 import { html, reactive } from '@xdadda/mini'
 import { confirm } from '@xdadda/mini/components'
 import '@xdadda/mini/components.css'
-import { shareBlob } from '../js/tools.js'
+import { shareBlob } from '../utils/tools.js'
 
 import isMobile from 'ismobilejs';
 

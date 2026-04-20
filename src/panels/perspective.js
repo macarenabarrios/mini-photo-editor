@@ -1,6 +1,6 @@
 import { html, reactive, onMount } from '@xdadda/mini'
-import section from './__section.js'
-import Perspective from './components/perspective2.js'
+import section from './_section.js'
+import Perspective from '../components/perspective2.js'
 
 
 export default function _perspective($selection, params, onUpdate){

@@ -1,6 +1,6 @@
 import { html, reactive } from '@xdadda/mini'
-import section from './__section.js'
-import {debounce} from './js/tools.js'
+import section from './_section.js'
+import {debounce} from '../utils/tools.js'
 
 
 export default function adjustments($selection, params, onUpdate){

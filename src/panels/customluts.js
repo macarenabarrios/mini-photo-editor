@@ -1,6 +1,6 @@
 import { html, reactive } from '@xdadda/mini'
-import section from './__section.js'
-import { parseCubeFile } from './vendor/mini-gl/minigl.js'
+import section from './_section.js'
+import { parseCubeFile } from '../vendor/mini-gl/minigl.js'
 
 /**
  * Custom .cube LUT loader.

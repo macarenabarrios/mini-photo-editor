@@ -1,8 +1,8 @@
 import { html, reactive } from '@xdadda/mini'
-import section from './__section.js'
-import {debounce} from './js/tools.js'
-import canvasMouse from './components/canvasmouse.js'
-import {centerCanvas} from './app.js'
+import section from './_section.js'
+import {debounce} from '../utils/tools.js'
+import canvasMouse from '../components/canvasmouse.js'
+import {centerCanvas} from '../app.js'
 
 export default function blur($selection, params, onUpdate){
 

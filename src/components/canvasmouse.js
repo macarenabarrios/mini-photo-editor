@@ -1,5 +1,5 @@
 import { html, onMount, onUnmount} from '@xdadda/mini'
-import {debounce} from '../js/tools.js'
+import {debounce} from '../utils/tools.js'
 
 //el: element to "cover" with mouse grid
 //initpoints: Array of points to map [[pt1_x,pt1_y],[...]]

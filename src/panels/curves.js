@@ -1,7 +1,7 @@
 import { html, reactive } from '@xdadda/mini'
-import CC from './components/colorcurve.js'
+import CC from '../components/colorcurve.js'
 
-import section from './__section.js'
+import section from './_section.js'
 
 export default function curves($selection, _params, onUpdate){
     let params=_params.curve

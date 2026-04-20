@@ -1,19 +1,19 @@
 import { html, reactive } from '@xdadda/mini'
-import icon_shutter_rotate from './assets/icon_shutter_rotate.svg?raw'
+import icon_shutter_rotate from '../assets/icon_shutter_rotate.svg?raw'
 
-import section from './__section.js'
+import section from './_section.js'
 
 
   const filtersLUT = [
-    {type:'1',label:'aden', map1: async()=> import('./assets/LUT/LUT_aden.png')},
-    {type:'1',label:'crema', map1: async()=> import('./assets/LUT/LUT_crema.png')},
-    {type:'2',label:'clarendon', map1: async()=> import('./assets/LUT/LUT_clarendon1.png'), map2: async()=> import('./assets/LUT/LUT_clarendon2.png')},
-    {type:'3',label:'gingham', map1: async()=> import('./assets/LUT/LUT_gingham1.png'), map2: async()=> import('./assets/LUT/LUT_gingham_lgg.png')},
-    {type:'1',label:'juno', map1: async()=> import('./assets/LUT/LUT_juno.png')},
-    {type:'1',label:'lark', map1: async()=> import('./assets/LUT/LUT_lark.png')},
-    {type:'1',label:'ludwig', map1: async()=> import('./assets/LUT/LUT_ludwig.png')},
-    {type:'4',label:'moon', map1: async()=> import('./assets/LUT/LUT_moon1.png'), map2: async()=> import('./assets/LUT/LUT_moon2.png')},
-    {type:'1',label:'reyes', map1: async()=> import('./assets/LUT/LUT_reyes.png')},
+    {type:'1',label:'aden', map1: async()=> import('../assets/LUT/LUT_aden.png')},
+    {type:'1',label:'crema', map1: async()=> import('../assets/LUT/LUT_crema.png')},
+    {type:'2',label:'clarendon', map1: async()=> import('../assets/LUT/LUT_clarendon1.png'), map2: async()=> import('../assets/LUT/LUT_clarendon2.png')},
+    {type:'3',label:'gingham', map1: async()=> import('../assets/LUT/LUT_gingham1.png'), map2: async()=> import('../assets/LUT/LUT_gingham_lgg.png')},
+    {type:'1',label:'juno', map1: async()=> import('../assets/LUT/LUT_juno.png')},
+    {type:'1',label:'lark', map1: async()=> import('../assets/LUT/LUT_lark.png')},
+    {type:'1',label:'ludwig', map1: async()=> import('../assets/LUT/LUT_ludwig.png')},
+    {type:'4',label:'moon', map1: async()=> import('../assets/LUT/LUT_moon1.png'), map2: async()=> import('../assets/LUT/LUT_moon2.png')},
+    {type:'1',label:'reyes', map1: async()=> import('../assets/LUT/LUT_reyes.png')},
     {type:'MTX',label:'polaroid', mtx: 'polaroid'},
     {type:'MTX',label:'kodak', mtx: 'kodachrome'},
     {type:'MTX',label:'browni', mtx: 'browni'},

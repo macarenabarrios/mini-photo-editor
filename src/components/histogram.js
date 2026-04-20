@@ -1,7 +1,7 @@
 import { html, onMount, onUnmount } from '@xdadda/mini'
 
 import Worker from './histogram_worker.js?worker'
-import {handlePointer} from '../js/zoom_pan.js'
+import {handlePointer} from '../utils/zoom_pan.js'
 
 
 export default function Histogram(colorspace, onSetup){

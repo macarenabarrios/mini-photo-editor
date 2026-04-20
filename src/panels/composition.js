@@ -1,11 +1,11 @@
 import { html, reactive, onMount } from '@xdadda/mini'
-import icon_rotate from './assets/icon_rotate.svg?raw'
-import icon_flip from './assets/icon_flip.svg?raw'
-import icon_skew from './assets/icon_skew.svg?raw'
+import icon_rotate from '../assets/icon_rotate.svg?raw'
+import icon_flip from '../assets/icon_flip.svg?raw'
+import icon_skew from '../assets/icon_skew.svg?raw'
 
-//import Quad from './components/perspective.js'
-import Perspective from './components/perspective2.js'
-import section from './__section.js'
+//import Quad from '../components/perspective.js'
+import Perspective from '../components/perspective2.js'
+import section from './_section.js'
 
 
 export default function composition($selection, adj, onUpdate, get_minigl, centerCanvas){

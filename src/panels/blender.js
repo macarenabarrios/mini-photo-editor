@@ -1,8 +1,8 @@
 import { html, reactive } from '@xdadda/mini'
-import clickdropFile from './components/clickdropFile.js'
-import { readImage } from './js/tools.js'
-import section from './__section.js'
-import {debounce} from './js/tools.js'
+import clickdropFile from '../components/clickdropFile.js'
+import { readImage } from '../utils/tools.js'
+import section from './_section.js'
+import {debounce} from '../utils/tools.js'
 
 export default function blender($selection, _params, onUpdate){
   const params = _params.blender

@@ -1,7 +1,7 @@
 import { html, reactive } from '@xdadda/mini'
 import { confirm } from '@xdadda/mini/components'
-import section from './__section.js'
-import {openFile, downloadFile} from './js/tools.js'
+import section from './_section.js'
+import {openFile, downloadFile} from '../utils/tools.js'
 
 export default function recipes($selection, params, onUpdate){
 

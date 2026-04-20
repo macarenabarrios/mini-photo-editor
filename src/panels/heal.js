@@ -1,7 +1,7 @@
 import { html, reactive, onMount, onUnmount } from '@xdadda/mini'
-import section from './__section.js'
-//import {debounce} from './js/tools.js'
-//import InpaintTelea from './js/inpaint.js'
+import section from './_section.js'
+//import {debounce} from '../utils/tools.js'
+//import InpaintTelea from '../utils/inpaint.js'
 
 //el: element to "cover" with mouse grid
 function healer(el, params, onPointerUp){

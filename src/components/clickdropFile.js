@@ -1,7 +1,7 @@
 import { html } from '@xdadda/mini'
 import { alert } from '@xdadda/mini/components'
 
-import { openFile } from '../js/tools.js'
+import { openFile } from '../utils/tools.js'
 
 
 //filetype es 'image/*'
