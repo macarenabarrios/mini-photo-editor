@@ -10,6 +10,11 @@ export { filterBlurGaussian } from './filters/filterBlurGaussian.js'
 export { filterTexture } from './filters/filterTexture.js'
 export { filterSharpen } from './filters/filterSharpen.js'
 export { filterLUT3D, disposeLUT3D } from './filters/filterLUT3D.js'
+export { filterWhitesBlacks } from './filters/filterWhitesBlacks.js'
+export { filterDehaze } from './filters/filterDehaze.js'
+export { filterHSL } from './filters/filterHSL.js'
+export { filterGrain } from './filters/filterGrain.js'
+export { filterVignetteAdv } from './filters/filterVignetteAdv.js'
 
 export function filterAdjustments(mini, effects) {
   //from https://pqina.nl/pintura/

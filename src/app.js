@@ -36,6 +36,9 @@ import blender from './panels/blender.js'
 import blur from './panels/blur.js'
 import recipes from './panels/recipes.js'
 import heal from './panels/heal.js'
+import hsl from './panels/hsl.js'
+import grain from './panels/grain.js'
+import vignette from './panels/vignette.js'
 import InpaintTelea from './utils/inpaint.js'
 
 const initstate = {
@@ -94,10 +97,30 @@ export function Editor(input = false) {
       contrast: 0,
       shadows: 0,
       highlights: 0,
+      whites: 0,
+      blacks: 0,
       bloom: 0,
     },
     colors: { temperature: 0, tint: 0, vibrance: 0, saturation: 0, sepia: 0 },
-    effects: { clarity: 0, texture: 0, sharpen: 0, noise: 0, vignette: 0 },
+    effects: { clarity: 0, texture: 0, sharpen: 0, noise: 0, dehaze: 0 },
+    hsl: {
+      red: { h: 0, s: 0, l: 0 },
+      orange: { h: 0, s: 0, l: 0 },
+      yellow: { h: 0, s: 0, l: 0 },
+      green: { h: 0, s: 0, l: 0 },
+      aqua: { h: 0, s: 0, l: 0 },
+      blue: { h: 0, s: 0, l: 0 },
+      purple: { h: 0, s: 0, l: 0 },
+      magenta: { h: 0, s: 0, l: 0 },
+    },
+    grain: { amount: 0, size: 0.25, rough: 0.5 },
+    vignette: {
+      amount: 0,
+      midpoint: 0.5,
+      feather: 0.5,
+      roundness: 0,
+      style: 0,
+    },
     curve: { curvepoints: 0 },
     filters: { opt: 0, mix: 0 },
     customluts: { active: 0, mix: 1 },
@@ -199,8 +222,21 @@ export function Editor(input = false) {
     hideSplitView()
     splitwidth = 0.5
     for (const s in params) {
-      for (const v in params[s]) params[s][v] = 0
+      if (!params[s] || typeof params[s] !== 'object') continue
+      for (const v in params[s]) {
+        const current = params[s][v]
+        if (current && typeof current === 'object' && !Array.isArray(current)) {
+          for (const k in current) current[k] = 0
+        } else {
+          params[s][v] = 0
+        }
+      }
     }
+    // Restore non-zero defaults
+    params.grain.size = 0.25
+    params.grain.rough = 0.5
+    params.vignette.midpoint = 0.5
+    params.vignette.feather = 0.5
   }
 
   //SETUP canvas and initiate minigl
@@ -324,7 +360,16 @@ export function Editor(input = false) {
         adjparams.highlights || 0,
         -adjparams.shadows || 0,
       )
+    if (!params.lights.$skip && (params.lights.whites || params.lights.blacks))
+      _minigl.filterWhitesBlacks(
+        params.lights.whites || 0,
+        params.lights.blacks || 0,
+      )
+    if (!params.effects.$skip && params.effects.dehaze)
+      _minigl.filterDehaze(params.effects.dehaze)
     ///////////
+
+    if (!params.hsl?.$skip && params.hsl) _minigl.filterHSL(params.hsl)
 
     if (!params.curve.$skip && params.curve.curvepoints)
       _minigl.filterCurves(params.curve.curvepoints)
@@ -347,6 +392,11 @@ export function Editor(input = false) {
       params.blur.gaussianlensout = params.blur.bokehlensout
       _minigl.filterBlurGaussian(params.blur)
     }
+
+    if (!params.grain?.$skip && params.grain?.amount)
+      _minigl.filterGrain(params.grain)
+    if (!params.vignette?.$skip && params.vignette?.amount)
+      _minigl.filterVignetteAdv(params.vignette)
 
     //draw to canvas
     _minigl.paintCanvas()
@@ -740,18 +790,28 @@ export function Editor(input = false) {
                       () => _minigl,
                       centerCanvas,
                     )}
-                    /******** PERSPECTIVE *******/ /******** ADJUSTMENTS
-                    *******/ ${adjustments($selection, params, updateGL)}
+                    /******** ADJUSTMENTS *******/
+                    ${adjustments($selection, params, updateGL)}
+                    /******** HSL COLOR MIXER *******/
+                    ${hsl($selection, params, updateGL)}
                     /******** COLOR CURVE *******/
-                    ${curves($selection, params, updateGL)} /******** FILTERS
-                    *******/ ${filters($selection, params, updateGL)} /********
-                    CUSTOM .CUBE LUTS *******/
-                    ${customluts($selection, params, updateGL)} /********
-                    BLENDER *******/ ${blender($selection, params, updateGL)}
+                    ${curves($selection, params, updateGL)}
+                    /******** FILTERS *******/
+                    ${filters($selection, params, updateGL)}
+                    /******** CUSTOM .CUBE LUTS *******/
+                    ${customluts($selection, params, updateGL)}
+                    /******** BLENDER *******/
+                    ${blender($selection, params, updateGL)}
                     /******** BLUR *******/
-                    ${blur($selection, params, updateGL)} /******** RECIPES
-                    *******/ ${recipes($selection, params, updateGL)} /********
-                    HEAL BRUSH *******/ ${heal($selection, params, updateGL)}
+                    ${blur($selection, params, updateGL)}
+                    /******** GRAIN *******/
+                    ${grain($selection, params, updateGL)}
+                    /******** VIGNETTE *******/
+                    ${vignette($selection, params, updateGL)}
+                    /******** RECIPES *******/
+                    ${recipes($selection, params, updateGL)}
+                    /******** HEAL BRUSH *******/
+                    ${heal($selection, params, updateGL)}
                   </div>
                 </div>
               </div>

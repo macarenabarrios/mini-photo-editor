@@ -35,7 +35,13 @@ export default function customluts($selection, _params, onUpdate) {
         const text = await file.text()
         const parsed = parseCubeFile(text)
         const id = file.name + ':' + parsed.size + ':' + file.size
-        store.set(id, { id, name: parsed.title || file.name, ...parsed })
+        store.set(id, {
+          id,
+          name: parsed.title || file.name,
+          ...parsed,
+          cubeText: text,
+          filename: file.name,
+        })
         params.active = id
         params.mix = params.mix || 1
         $error.value = ''
