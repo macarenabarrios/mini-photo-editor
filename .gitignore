@@ -6,5 +6,4 @@ lib
 dist-ssr
 *.local
 .env*
-package-lock.json
 TODO.txt
