@@ -7,7 +7,7 @@ import './app.css'
 import './editor.css'
 
 import miniExif from '@xdadda/mini-exif'
-import { minigl} from '@xdadda/mini-gl'
+import { minigl} from './vendor/mini-gl/minigl.js'
 import logo from './assets/icon.png'
 import github from './assets/icon_github.png'
 import icon_split from './assets/icon_split.svg?raw'
