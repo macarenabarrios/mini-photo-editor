@@ -5,6 +5,7 @@
 
 import * as Filters from './minigl_filters.js'
 export {Spline} from './filters/cubicspline.js'
+export {parseCubeFile} from './utils/cubeParser.js'
 
 const usesrgb=true //to guarantee gamma correct workflow, SRGB in input - processing is linear - SRGB in output
 

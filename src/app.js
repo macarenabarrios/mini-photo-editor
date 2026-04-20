@@ -7,7 +7,7 @@ import './app.css'
 import './editor.css'
 
 import miniExif from '@xdadda/mini-exif'
-import { minigl} from './vendor/mini-gl/minigl.js'
+import { minigl, parseCubeFile } from './vendor/mini-gl/minigl.js'
 import logo from './assets/icon.png'
 import github from './assets/icon_github.png'
 import icon_split from './assets/icon_split.svg?raw'
@@ -34,6 +34,7 @@ import composition from './_composition.js'
 import adjustments from './_adjustments.js'
 import curves from './_curves.js'
 import filters from './_filters.js'
+import customluts from './_customluts.js'
 import blender from './_blender.js'
 import blur from './_blur.js'
 import recipes from './_recipes.js'
@@ -90,6 +91,7 @@ export function Editor(input=false){
       effects: { clarity:0, texture:0, sharpen:0, noise:0, vignette:0, },
       curve: {curvepoints: 0},
       filters: { opt:0, mix:0 },
+      customluts: { active:0, mix:1 },
       perspective: {quad:0, modified:0},
       perspective2: {before:0, after:0, modified:0},
       blender: {blendmap:0, blendmix:0.5},
@@ -285,7 +287,12 @@ export function Editor(input=false){
       ///////////
 
       if(!params.curve.$skip && params.curve.curvepoints) _minigl.filterCurves(params.curve.curvepoints)
-      if(!params.filters.$skip && params.filters.opt) _minigl.filterInsta(params.filters.opt,params.filters.mix)      
+      if(!params.filters.$skip && params.filters.opt) _minigl.filterInsta(params.filters.opt,params.filters.mix)
+
+      if(!params.customluts.$skip && params.customluts.active && params._lutStore) {
+        const lut = params._lutStore.get(params.customluts.active)
+        if(lut) _minigl.filterLUT3D(lut, params.customluts.mix ?? 1)
+      }
       
       if(!params.blur.$skip && params.blur.bokehstrength) {
         _minigl.filterBlurBokeh(params.blur)
@@ -546,6 +553,9 @@ export function Editor(input=false){
 
                   /******** FILTERS *******/
                   ${filters($selection, params, updateGL)}
+
+                  /******** CUSTOM .CUBE LUTS *******/
+                  ${customluts($selection, params, updateGL)}
 
                   /******** BLENDER *******/
                   ${blender($selection, params, updateGL)}

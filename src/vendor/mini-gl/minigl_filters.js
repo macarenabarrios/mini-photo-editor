@@ -9,6 +9,7 @@ export { filterBlurBokeh } from './filters/filterBlurBokeh.js'
 export { filterBlurGaussian } from './filters/filterBlurGaussian.js'
 export { filterTexture } from './filters/filterTexture.js'
 export { filterSharpen } from './filters/filterSharpen.js'
+export { filterLUT3D, disposeLUT3D } from './filters/filterLUT3D.js'
 
 
 export function filterAdjustments(mini, effects) {
