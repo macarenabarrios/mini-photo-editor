@@ -71,11 +71,13 @@ export function filterLUT3D(mini, lut, mix = 1) {
       gl.TEXTURE_3D,
       0,
       gl.RGB32F,
-      lut.size, lut.size, lut.size,
+      lut.size,
+      lut.size,
+      lut.size,
       0,
       gl.RGB,
       gl.FLOAT,
-      lut.data
+      lut.data,
     )
     gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)

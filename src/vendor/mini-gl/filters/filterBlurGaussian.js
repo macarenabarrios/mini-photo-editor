@@ -1,7 +1,7 @@
 import { Shader, Texture } from '../minigl.js'
 
 export function filterBlurGaussian(mini, params) {
-    const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         //https://www.shadertoy.com/view/XdfGDH
         precision highp float;
 
@@ -63,11 +63,24 @@ export function filterBlurGaussian(mini, params) {
         }
       `
 
-    const {gl}=mini
-    let { gaussianstrength=0.5, gaussianlensin=0, gaussianlensout=0.5, centerX=0, centerY=0} = params || {}
-    const uResolution = [gl.canvas.width,gl.canvas.height];
-    //setup and run effect
+  const { gl } = mini
+  let {
+    gaussianstrength = 0.5,
+    gaussianlensin = 0,
+    gaussianlensout = 0.5,
+    centerX = 0,
+    centerY = 0,
+  } = params || {}
+  const uResolution = [gl.canvas.width, gl.canvas.height]
+  //setup and run effect
 
-    mini._.$gaussianblur = mini._.$gaussianblur || new Shader(gl, null, _fragment);
-    mini.runFilter(mini._.$gaussianblur, {gaussianstrength,gaussianlensin,gaussianlensout,centerX,centerY,uResolution} )
+  mini._.$gaussianblur = mini._.$gaussianblur || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$gaussianblur, {
+    gaussianstrength,
+    gaussianlensin,
+    gaussianlensout,
+    centerX,
+    centerY,
+    uResolution,
+  })
 }

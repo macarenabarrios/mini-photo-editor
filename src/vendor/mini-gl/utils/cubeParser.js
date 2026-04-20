@@ -33,7 +33,11 @@ export function parseCubeFile(content) {
     }
 
     // Ignored metadata
-    if (line.startsWith('DOMAIN_MIN') || line.startsWith('DOMAIN_MAX') || line.startsWith('LUT_1D_SIZE')) {
+    if (
+      line.startsWith('DOMAIN_MIN') ||
+      line.startsWith('DOMAIN_MAX') ||
+      line.startsWith('LUT_1D_SIZE')
+    ) {
       continue
     }
 
@@ -54,7 +58,10 @@ export function parseCubeFile(content) {
   const expectedLength = size ** 3 * 3
   if (rgbValues.length !== expectedLength) {
     throw new Error(
-      'LUT data mismatch: expected ' + expectedLength + ' values, found ' + rgbValues.length
+      'LUT data mismatch: expected ' +
+        expectedLength +
+        ' values, found ' +
+        rgbValues.length,
     )
   }
 

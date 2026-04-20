@@ -23,7 +23,9 @@ export default function customluts($selection, _params, onUpdate) {
   const $list = reactive([...store.keys()])
   const $error = reactive('')
 
-  function refreshList() { $list.value = [...store.keys()] }
+  function refreshList() {
+    $list.value = [...store.keys()]
+  }
 
   async function onFileChange(e) {
     const files = [...(e.target.files || [])]
@@ -97,18 +99,47 @@ export default function customluts($selection, _params, onUpdate) {
     else el.removeAttribute('disabled')
   }
 
-  reactive(() => {
-    if ($selection.value === null) updateResetBtn()
-  }, { effect: true })
+  reactive(
+    () => {
+      if ($selection.value === null) updateResetBtn()
+    },
+    { effect: true },
+  )
 
   return html`
     <style>
-      .lutrow { display:flex; align-items:center; gap:6px; padding:3px 4px; border-radius:4px; cursor:pointer; }
-      .lutrow[selected] { background: rgba(255,165,0,.2); }
-      .lutrow .name { flex:1; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-      .lutrow .rm { opacity:.6; cursor:pointer; padding:0 4px; }
-      .lutrow .rm:hover { opacity:1; color:#f55; }
-      .lut_err { color:#f55; font-size:11px; margin:4px 0; }
+      .lutrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 4px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .lutrow[selected] {
+        background: rgba(255, 165, 0, 0.2);
+      }
+      .lutrow .name {
+        flex: 1;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .lutrow .rm {
+        opacity: 0.6;
+        cursor: pointer;
+        padding: 0 4px;
+      }
+      .lutrow .rm:hover {
+        opacity: 1;
+        color: #f55;
+      }
+      .lut_err {
+        color: #f55;
+        font-size: 11px;
+        margin: 4px 0;
+      }
     </style>
 
     ${section(
@@ -119,34 +150,77 @@ export default function customluts($selection, _params, onUpdate) {
       onUpdate,
       resetSection,
       () => html`
-        <div style="display:flex;justify-content:space-around;align-items:center;">
-          <label style="cursor:pointer;font-size:12px;padding:4px 8px;border:1px solid #888;border-radius:4px;">
+        <div
+          style="display:flex;justify-content:space-around;align-items:center;"
+        >
+          <label
+            style="cursor:pointer;font-size:12px;padding:4px 8px;border:1px solid #888;border-radius:4px;"
+          >
             + Load .cube
-            <input type="file" accept=".cube" multiple style="display:none;" @change="${onFileChange}">
+            <input
+              type="file"
+              accept=".cube"
+              multiple
+              style="display:none;"
+              @change="${onFileChange}"
+            />
           </label>
         </div>
 
-        ${() => $error.value && html`<div class="lut_err">${$error.value}</div>`}
+        ${() =>
+          $error.value && html`<div class="lut_err">${$error.value}</div>`}
 
         <div style="max-height:90px;overflow-y:auto;margin-top:6px;">
-          ${() => $list.value.map(id => {
-            const item = store.get(id)
-            if (!item) return ''
-            return html`
-              <div class="lutrow" :selected="${() => params.active === id}" @click="${() => selectLUT(id)}">
-                <span class="name" title="${item.name}">${item.name} (${item.size}³)</span>
-                <span class="rm" @click="${(e) => removeLUT(id, e)}" title="remove">✕</span>
-              </div>
-            `
-          })}
+          ${() =>
+            $list.value.map((id) => {
+              const item = store.get(id)
+              if (!item) return ''
+              return html`
+                <div
+                  class="lutrow"
+                  :selected="${() => params.active === id}"
+                  @click="${() => selectLUT(id)}"
+                >
+                  <span class="name" title="${item.name}"
+                    >${item.name} (${item.size}³)</span
+                  >
+                  <span
+                    class="rm"
+                    @click="${(e) => removeLUT(id, e)}"
+                    title="remove"
+                    >✕</span
+                  >
+                </div>
+              `
+            })}
         </div>
 
-        <div style="display:flex;justify-content:space-around;align-items:center;margin-top:6px;">
+        <div
+          style="display:flex;justify-content:space-around;align-items:center;margin-top:6px;"
+        >
           <div class="rangelabel">mix</div>
-          <input id="customluts_mix"  type="range"  style="width:130px;" value="${params.mix || 1}" min=0 max=1 step=0.01 @input="${setMix}">
-          <input id="customluts_mix_" type="number" class="rangenumb"    value="${params.mix || 1}" min=0 max=1 step=0.01 @input="${setMixNum}">
+          <input
+            id="customluts_mix"
+            type="range"
+            style="width:130px;"
+            value="${params.mix || 1}"
+            min="0"
+            max="1"
+            step="0.01"
+            @input="${setMix}"
+          />
+          <input
+            id="customluts_mix_"
+            type="number"
+            class="rangenumb"
+            value="${params.mix || 1}"
+            min="0"
+            max="1"
+            step="0.01"
+            @input="${setMixNum}"
+          />
         </div>
-      `
+      `,
     )}
   `
 }

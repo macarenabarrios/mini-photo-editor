@@ -11,13 +11,12 @@ export { filterTexture } from './filters/filterTexture.js'
 export { filterSharpen } from './filters/filterSharpen.js'
 export { filterLUT3D, disposeLUT3D } from './filters/filterLUT3D.js'
 
-
 export function filterAdjustments(mini, effects) {
-      //from https://pqina.nl/pintura/
-      //from https://tsev.dev/posts/2020-06-19-colour-correction-with-webgl/
-      //from https://api.pixijs.io/@pixi/filter-color-matrix/src/ColorMatrixFilter.ts.html
+  //from https://pqina.nl/pintura/
+  //from https://tsev.dev/posts/2020-06-19-colour-correction-with-webgl/
+  //from https://api.pixijs.io/@pixi/filter-color-matrix/src/ColorMatrixFilter.ts.html
 
-      const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         precision highp float;
 
         in vec2 texCoord;
@@ -99,69 +98,90 @@ export function filterAdjustments(mini, effects) {
         }
       `
 
-      const {gl} = mini
+  const { gl } = mini
 
-      let vignpos = [0,0]
-      let {brightness: b=0, contrast: c=0, saturation: s=0, exposure: e=0, temperature: t=0, gamma=0, clarity: l=0, vibrance=0, vignette=0, tint:tt=0, sepia:sp=0} = effects
-      //some params adjustments to fit shader and user experience
-      b=b/4;c=(c+1)/2+0.5;s=s+1;e=((e>0?e*3:e*1.5)+1)/2+0.5;gamma+=1;t*=3,tt*=2;
-      
-      let colormatrix={ //[r,g,b,a,w]
-        //brightness t (0-2)
-        brightness: [
-          [1, 0, 0, 0, b, ],
-          [0, 1, 0, 0, b, ],
-          [0, 0, 1, 0, b, ],
-          [0, 0, 0, 1, 0]
-        ],
-        //constrast t (0-2)
-        contrast: [ 
-          [c, 0, 0, 0, 0.5 * (1 - c), ],
-          [0, c, 0, 0, 0.5 * (1 - c), ],
-          [0, 0, c, 0, 0.5 * (1 - c), ],
-          [0, 0, 0, 1, 0]
-        ],
-        //saturation (0-2)
-        saturation: [
-          [0.213 + 0.787 * s, 0.715 - 0.715 * s, 0.072 - 0.072 * s, 0, 0, ],
-          [0.213 - 0.213 * s, 0.715 + 0.285 * s, 0.072 - 0.072 * s, 0, 0, ],
-          [0.213 - 0.213 * s, 0.715 - 0.715 * s, 0.072 + 0.928 * s, 0, 0, ],
-          [0, 0, 0, 1, 0]
-        ],
-        //exposure (0-2)
-        exposure: [
-          [e, 0, 0, 0, 0, ],
-          [0, e, 0, 0, 0, ],
-          [0, 0, e, 0, 0, ],
-          [0, 0, 0, 1, 0]
-        ],
-        //temperature (-1 +1)
-        temperature: t > 0 ? [
-          [1 + .1 * t, 0, 0, 0, 0, ],
-          [0, 1, 0, 0, 0, ],
-          [0, 0, 1 + .1 * -t, 0, 0, ],
-          [0, 0, 0, 1, 0]
-        ] : [
-          [1 + .15 * t, 0, 0, 0, 0, ],
-          [0, 1 + .05 * t, 0, 0, 0, ],
-          [0, 0, 1 + .15 * -t, 0, 0, ],
-          [0, 0, 0, 1, 0]
-        ],
-        //tint 
-        tint: [
-          [1,0,0,0,0],
-          [0,1+0.1*tt,0,0,0],
-          [0,0,1,0,0],
-          [0,0,0,1,0],
-        ],
-        //sepia 
-        sepia: [
-          [1-.607*sp,.769*sp,.189*sp,0,0],
-          [.349*sp,1-.314*sp,.168*sp,0,0],
-          [.272*sp,.534*sp,1-.869*sp,0,0],
-          [0,0,0,1,0],
-        ],
-        /*
+  let vignpos = [0, 0]
+  let {
+    brightness: b = 0,
+    contrast: c = 0,
+    saturation: s = 0,
+    exposure: e = 0,
+    temperature: t = 0,
+    gamma = 0,
+    clarity: l = 0,
+    vibrance = 0,
+    vignette = 0,
+    tint: tt = 0,
+    sepia: sp = 0,
+  } = effects
+  //some params adjustments to fit shader and user experience
+  b = b / 4
+  c = (c + 1) / 2 + 0.5
+  s = s + 1
+  e = ((e > 0 ? e * 3 : e * 1.5) + 1) / 2 + 0.5
+  gamma += 1
+  ;((t *= 3), (tt *= 2))
+
+  let colormatrix = {
+    //[r,g,b,a,w]
+    //brightness t (0-2)
+    brightness: [
+      [1, 0, 0, 0, b],
+      [0, 1, 0, 0, b],
+      [0, 0, 1, 0, b],
+      [0, 0, 0, 1, 0],
+    ],
+    //constrast t (0-2)
+    contrast: [
+      [c, 0, 0, 0, 0.5 * (1 - c)],
+      [0, c, 0, 0, 0.5 * (1 - c)],
+      [0, 0, c, 0, 0.5 * (1 - c)],
+      [0, 0, 0, 1, 0],
+    ],
+    //saturation (0-2)
+    saturation: [
+      [0.213 + 0.787 * s, 0.715 - 0.715 * s, 0.072 - 0.072 * s, 0, 0],
+      [0.213 - 0.213 * s, 0.715 + 0.285 * s, 0.072 - 0.072 * s, 0, 0],
+      [0.213 - 0.213 * s, 0.715 - 0.715 * s, 0.072 + 0.928 * s, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+    //exposure (0-2)
+    exposure: [
+      [e, 0, 0, 0, 0],
+      [0, e, 0, 0, 0],
+      [0, 0, e, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+    //temperature (-1 +1)
+    temperature:
+      t > 0
+        ? [
+            [1 + 0.1 * t, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0],
+            [0, 0, 1 + 0.1 * -t, 0, 0],
+            [0, 0, 0, 1, 0],
+          ]
+        : [
+            [1 + 0.15 * t, 0, 0, 0, 0],
+            [0, 1 + 0.05 * t, 0, 0, 0],
+            [0, 0, 1 + 0.15 * -t, 0, 0],
+            [0, 0, 0, 1, 0],
+          ],
+    //tint
+    tint: [
+      [1, 0, 0, 0, 0],
+      [0, 1 + 0.1 * tt, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+    //sepia
+    sepia: [
+      [1 - 0.607 * sp, 0.769 * sp, 0.189 * sp, 0, 0],
+      [0.349 * sp, 1 - 0.314 * sp, 0.168 * sp, 0, 0],
+      [0.272 * sp, 0.534 * sp, 1 - 0.869 * sp, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+    /*
         //same as saturation!
         gray: [
           [1-.7874*g,.7152*g,.0722*g,0,0],
@@ -170,58 +190,71 @@ export function filterAdjustments(mini, effects) {
           [0,0,0,1,0],
         ],
         */
-        identity: [
-          [1,0,0,0,0],
-          [0,1,0,0,0],
-          [0,0,1,0,0],
-          [0,0,0,1,0],
-        ],
-      }
+    identity: [
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+    ],
+  }
 
-      let cMatrix=colormatrix.identity
-      let cOffset = [0,0,0,0]
-      cMatrix = multiplyM(cMatrix,colormatrix.brightness, 4)
-      cOffset= [0,1,2,3].map(i=> cOffset[i]+colormatrix.brightness[i][4])
-      cMatrix = multiplyM(cMatrix,colormatrix.contrast, 4)
-      cOffset =[0,1,2,3].map(i=> cOffset[i]+colormatrix.contrast[i][4])
-      cMatrix = multiplyM(cMatrix,colormatrix.saturation, 4)
-      cMatrix = multiplyM(cMatrix,colormatrix.exposure, 4)
-      cMatrix = multiplyM(cMatrix,colormatrix.temperature, 4)
-      cMatrix = multiplyM(cMatrix,colormatrix.tint, 4)
-      cMatrix = multiplyM(cMatrix,colormatrix.sepia, 4)
+  let cMatrix = colormatrix.identity
+  let cOffset = [0, 0, 0, 0]
+  cMatrix = multiplyM(cMatrix, colormatrix.brightness, 4)
+  cOffset = [0, 1, 2, 3].map((i) => cOffset[i] + colormatrix.brightness[i][4])
+  cMatrix = multiplyM(cMatrix, colormatrix.contrast, 4)
+  cOffset = [0, 1, 2, 3].map((i) => cOffset[i] + colormatrix.contrast[i][4])
+  cMatrix = multiplyM(cMatrix, colormatrix.saturation, 4)
+  cMatrix = multiplyM(cMatrix, colormatrix.exposure, 4)
+  cMatrix = multiplyM(cMatrix, colormatrix.temperature, 4)
+  cMatrix = multiplyM(cMatrix, colormatrix.tint, 4)
+  cMatrix = multiplyM(cMatrix, colormatrix.sepia, 4)
 
-
-      let claritykernel = l >= 0 ? [
-          0, -1 * l, 0, 
-          -1 * l, 1 + 4 * l, -1 * l, 
-          0, -1 * l, 0
-        ] : [
-          -1 * l, -2 * l, -1 * l, 
-          -2 * l, 1 + -3 * l, -2 * l, 
-          -1 * l, -2 * l, -1 * l
+  let claritykernel =
+    l >= 0
+      ? [0, -1 * l, 0, -1 * l, 1 + 4 * l, -1 * l, 0, -1 * l, 0]
+      : [
+          -1 * l,
+          -2 * l,
+          -1 * l,
+          -2 * l,
+          1 + -3 * l,
+          -2 * l,
+          -1 * l,
+          -2 * l,
+          -1 * l,
         ]
-      let clarityweight = claritykernel.reduce(((e, t) => e + t), 0)
-      clarityweight = clarityweight <= 0 ? 1 : clarityweight
-      //clarity kernel has lenght=9, as a 3x3 matrix .. envelop in an array for Shader.uniforms to recognise it as a float array[]
-      claritykernel = [claritykernel] 
+  let clarityweight = claritykernel.reduce((e, t) => e + t, 0)
+  clarityweight = clarityweight <= 0 ? 1 : clarityweight
+  //clarity kernel has lenght=9, as a 3x3 matrix .. envelop in an array for Shader.uniforms to recognise it as a float array[]
+  claritykernel = [claritykernel]
 
-      //const {temperature,tint} = effects
-      const uColorMatrix = cMatrix.flat();
-      const uColorOffset = cOffset;
-      const uTextureSize = [gl.canvas.width,gl.canvas.height]; //[width,height];
-      const uVibrance=vibrance;
-      const uColorVignette=vignette;
-      const uClarityKernel=claritykernel;
-      const uClarityKernelWeight=clarityweight;
-      const uVignettePos=vignpos;
+  //const {temperature,tint} = effects
+  const uColorMatrix = cMatrix.flat()
+  const uColorOffset = cOffset
+  const uTextureSize = [gl.canvas.width, gl.canvas.height] //[width,height];
+  const uVibrance = vibrance
+  const uColorVignette = vignette
+  const uClarityKernel = claritykernel
+  const uClarityKernelWeight = clarityweight
+  const uVignettePos = vignpos
 
-
-      //setup and run effect
-      mini._.$adj = mini._.$adj || new Shader(gl, null, _fragment)
-      mini.runFilter(mini._.$adj, {uColorMatrix, uColorOffset, uColorGamma:1/gamma, uClarityKernel, uClarityKernelWeight, uTextureSize, uVibrance, uColorVignette, uVignettePos})
+  //setup and run effect
+  mini._.$adj = mini._.$adj || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$adj, {
+    uColorMatrix,
+    uColorOffset,
+    uColorGamma: 1 / gamma,
+    uClarityKernel,
+    uClarityKernelWeight,
+    uTextureSize,
+    uVibrance,
+    uColorVignette,
+    uVignettePos,
+  })
 }
 
-export function filterHighlightsShadows(mini,val1,val2){
+export function filterHighlightsShadows(mini, val1, val2) {
   //SHADOWS-HIGHLIGHTS - https://stackoverflow.com/questions/26511037/how-can-i-modify-this-webgl-fragment-shader-to-increase-brightness-of-highlights
   const _fragment = `#version 300 es
         precision highp float;
@@ -271,13 +304,13 @@ export function filterHighlightsShadows(mini,val1,val2){
           outColor = vec4(result, color.a);
         }
   `
-    const {gl}=mini
-    //setup and run effect
-    mini._.$sg = mini._.$sg || new Shader(gl, null, _fragment);
-    mini.runFilter(mini._.$sg, { highlights:val1+1, shadows: val2/2+1 } )
+  const { gl } = mini
+  //setup and run effect
+  mini._.$sg = mini._.$sg || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$sg, { highlights: val1 + 1, shadows: val2 / 2 + 1 })
 }
 
-export function filterBloom(mini,val){
+export function filterBloom(mini, val) {
   //BLOOM - https://www.shadertoy.com/view/Ms2Xz3
   const _fragment = `#version 300 es
         precision highp float;
@@ -315,13 +348,13 @@ export function filterBloom(mini,val){
           outColor = 1.0-(1.0-color)*(1.0-Highlight*Intensity); //Screen Blend Mode
         }
   `
-    const {gl}=mini
-    const uResolution = [gl.canvas.width,gl.canvas.height]; //[width,height];
-    mini._.$bloom = mini._.$bloom || new Shader(gl, null, _fragment);
-    mini.runFilter(mini._.$bloom, { filterStrength: val, uResolution });
+  const { gl } = mini
+  const uResolution = [gl.canvas.width, gl.canvas.height] //[width,height];
+  mini._.$bloom = mini._.$bloom || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$bloom, { filterStrength: val, uResolution })
 }
 
-export function filterNoise(mini,val){
+export function filterNoise(mini, val) {
   //BILATER FILTER  https://www.shadertoy.com/view/4dfGDH
   const _fragment = `#version 300 es
         precision highp float;
@@ -377,29 +410,24 @@ export function filterNoise(mini,val){
           outColor = color;
         }
   `
-    const {gl}=mini
-    const uResolution = [gl.canvas.width,gl.canvas.height];// [width,height];
-    mini._.$noise = mini._.$noise || new Shader(gl, null, _fragment);
-    mini.runFilter(mini._.$noise, { filterStrength: val, uResolution });
+  const { gl } = mini
+  const uResolution = [gl.canvas.width, gl.canvas.height] // [width,height];
+  mini._.$noise = mini._.$noise || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$noise, { filterStrength: val, uResolution })
 }
-
-
 
 ///////// UTILITY FUNCTIONS ////////////////////
 
-  function multiplyM(A, B, N=3) {
-      let C=[];
-      for (var i = 0; i < N; i++)
-      {
-          C.push([])
-          for (var j = 0; j < N; j++)
-          {
-              C[i].push(0)
-              for (var k = 0; k < N; k++)
-              {
-                  if(A[i]&&B[k]) C[i][j] += A[i][k]*B[k][j];
-              }
-          }
+function multiplyM(A, B, N = 3) {
+  let C = []
+  for (var i = 0; i < N; i++) {
+    C.push([])
+    for (var j = 0; j < N; j++) {
+      C[i].push(0)
+      for (var k = 0; k < N; k++) {
+        if (A[i] && B[k]) C[i][j] += A[i][k] * B[k][j]
       }
-      return C
+    }
   }
+  return C
+}

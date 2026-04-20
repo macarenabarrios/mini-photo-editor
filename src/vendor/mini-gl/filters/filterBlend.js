@@ -1,9 +1,9 @@
 import { Shader, Texture } from '../minigl.js'
 
-export function filterBlend(mini, blendmap, blendmix){
-    const {gl} = mini
+export function filterBlend(mini, blendmap, blendmix) {
+  const { gl } = mini
 
-    const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         precision highp float;
 
         in vec2 texCoord;
@@ -36,10 +36,12 @@ export function filterBlend(mini, blendmap, blendmix){
           outColor = color;
         }`
 
-    mini._.$blend = mini._.$blend || new Shader(gl, null, _fragment);
-    mini._.$blendtxt = mini._.$blendtxt || new Texture(gl);
-    mini._.$blendtxt.loadImage(blendmap)
-    mini._.$blendtxt.use(1);
-    mini.runFilter(mini._.$blend, { filterStrength: blendmix??1, map:{unit:1} });
-
+  mini._.$blend = mini._.$blend || new Shader(gl, null, _fragment)
+  mini._.$blendtxt = mini._.$blendtxt || new Texture(gl)
+  mini._.$blendtxt.loadImage(blendmap)
+  mini._.$blendtxt.use(1)
+  mini.runFilter(mini._.$blend, {
+    filterStrength: blendmix ?? 1,
+    map: { unit: 1 },
+  })
 }

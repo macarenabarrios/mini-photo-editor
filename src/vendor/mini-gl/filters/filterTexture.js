@@ -13,9 +13,9 @@ import { Shader } from '../minigl.js'
 // Range: -100 to 100
 
 export function filterTexture(mini, amount) {
-    if (amount === 0) return
+  if (amount === 0) return
 
-    const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         precision highp float;
 
         in vec2 texCoord;
@@ -62,10 +62,10 @@ export function filterTexture(mini, amount) {
         }
     `
 
-    const { gl } = mini
-    const uResolution = [gl.canvas.width, gl.canvas.height]
-    const uAmount = amount / 100.0 * 2.5
+  const { gl } = mini
+  const uResolution = [gl.canvas.width, gl.canvas.height]
+  const uAmount = (amount / 100.0) * 2.5
 
-    mini._.$texture = mini._.$texture || new Shader(gl, null, _fragment)
-    mini.runFilter(mini._.$texture, { uAmount, uResolution })
+  mini._.$texture = mini._.$texture || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$texture, { uAmount, uResolution })
 }

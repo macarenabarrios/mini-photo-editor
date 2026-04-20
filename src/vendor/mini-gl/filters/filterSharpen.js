@@ -6,9 +6,9 @@ import { Shader } from '../minigl.js'
 // Range: 0 to 100
 
 export function filterSharpen(mini, amount) {
-    if (amount <= 0) return
+  if (amount <= 0) return
 
-    const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         precision highp float;
 
         in vec2 texCoord;
@@ -56,10 +56,10 @@ export function filterSharpen(mini, amount) {
         }
     `
 
-    const { gl } = mini
-    const uResolution = [gl.canvas.width, gl.canvas.height]
-    const uAmount = amount / 100.0 * 2.0
+  const { gl } = mini
+  const uResolution = [gl.canvas.width, gl.canvas.height]
+  const uAmount = (amount / 100.0) * 2.0
 
-    mini._.$sharpen = mini._.$sharpen || new Shader(gl, null, _fragment)
-    mini.runFilter(mini._.$sharpen, { uAmount, uResolution })
+  mini._.$sharpen = mini._.$sharpen || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$sharpen, { uAmount, uResolution })
 }

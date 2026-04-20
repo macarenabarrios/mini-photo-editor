@@ -1,7 +1,7 @@
 import { Shader, Texture } from '../minigl.js'
 
 export function filterBlurBokeh(mini, params) {
-    const _fragment = `#version 300 es
+  const _fragment = `#version 300 es
         //Bokeh disc. by David Hoskins.
         //https://www.shadertoy.com/view/4d2Xzw
         precision highp float;
@@ -54,9 +54,21 @@ export function filterBlurBokeh(mini, params) {
         }
       `
 
-    const {gl}=mini
-    let { bokehstrength=0.5, bokehlensin=0, bokehlensout=0.5, centerX=0, centerY=0} = params || {}
-    //setup and run effect
-    mini._.$lensblur = mini._.$lensblur || new Shader(gl, null, _fragment);
-    mini.runFilter(mini._.$lensblur, {bokehstrength,bokehlensin,bokehlensout,centerX,centerY} )
+  const { gl } = mini
+  let {
+    bokehstrength = 0.5,
+    bokehlensin = 0,
+    bokehlensout = 0.5,
+    centerX = 0,
+    centerY = 0,
+  } = params || {}
+  //setup and run effect
+  mini._.$lensblur = mini._.$lensblur || new Shader(gl, null, _fragment)
+  mini.runFilter(mini._.$lensblur, {
+    bokehstrength,
+    bokehlensin,
+    bokehlensout,
+    centerX,
+    centerY,
+  })
 }
